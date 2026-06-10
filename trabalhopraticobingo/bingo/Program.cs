@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace exercicio2
+namespace bingo
 {
     class Cartela
     {
@@ -138,6 +138,63 @@ namespace exercicio2
                 }
             }
             return linhaTrue;
+        }
+    }
+    class Jogador
+    {
+        string nome;
+        char sexo;
+        int idade, total_Cartelas;
+        Random valor = new Random();
+
+        public Cartela[] cartelasJog;
+        public Jogador(string nome, char sexo, int idade, int total_Cartelas)
+        {
+            this.nome = nome;
+            this.sexo = sexo;
+            this.idade = idade;
+            this.total_Cartelas = total_Cartelas;
+            cartelasJog = new Cartela[total_Cartelas];
+        }
+        public void AdicionarCartela(Cartela cart)
+        {
+            for (int i = 0; i < cartelasJog.Length; i++)
+            {
+                cart.PreencherCartela(valor);
+                cartelasJog[i] = cart;
+            }
+        }
+    }
+    class Jogo
+    {
+        Jogador[] jogadores;
+        public int[] numerosSort = new int[75];
+        public int numSort = 0;
+        bool verificaNumSort = true;
+        public Jogo(int totalJogadores)
+        {
+            this.jogadores = new Jogador[totalJogadores];
+        }
+        public int[] SortearNumero(Random valor)
+        {
+            int numeroSort = valor.Next(1, 76);
+            for (int i = 0; i < numeroSort && verificaNumSort == true; i++)
+            {
+                for (int j = 0; j < numeroSort && verificaNumSort == true; j++)
+                {
+                    if (numerosSort[j] == numeroSort)
+                    {
+                        verificaNumSort = false;
+                    }
+                }
+                if (verificaNumSort)
+                {
+                    numerosSort[i] = numeroSort;
+                    numSort++;
+
+                }
+            }
+            return numerosSort;
         }
     }
     internal class Program
