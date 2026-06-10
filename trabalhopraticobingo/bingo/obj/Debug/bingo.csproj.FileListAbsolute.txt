@@ -1,0 +1,7 @@
+D:\bingo\trabalhopraticobingo\bingo\bin\Debug\bingo.exe.config
+D:\bingo\trabalhopraticobingo\bingo\bin\Debug\bingo.exe
+D:\bingo\trabalhopraticobingo\bingo\bin\Debug\bingo.pdb
+D:\bingo\trabalhopraticobingo\bingo\obj\Debug\bingo.csproj.AssemblyReference.cache
+D:\bingo\trabalhopraticobingo\bingo\obj\Debug\bingo.csproj.CoreCompileInputs.cache
+D:\bingo\trabalhopraticobingo\bingo\obj\Debug\bingo.exe
+D:\bingo\trabalhopraticobingo\bingo\obj\Debug\bingo.pdb

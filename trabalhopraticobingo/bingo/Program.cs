@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace bingo
 {
@@ -20,7 +23,6 @@ namespace bingo
         public void PreencherCartela(Random r)
         {
             bool valorIne;
-            bool linhaTrue;
             for (int i = 0; i < matrizCart.GetLength(0); i++)
             {
                 for (int j = 0; j < matrizCart.GetLength(1); j++)
@@ -28,7 +30,7 @@ namespace bingo
                     valorIne = false;
                     if (j == 2 && i == 2)
                     {
-
+                        continue;
                     }
                     else if (j == 0)
                     {
@@ -37,7 +39,6 @@ namespace bingo
                         if (valorIne == false)
                         {
                             matrizCart[i, j] = valor;
-                            MarcarNumero(valor, j);
                         }
                         else
                         {
@@ -51,7 +52,6 @@ namespace bingo
                         if (valorIne == false)
                         {
                             matrizCart[i, j] = valor;
-                            MarcarNumero(valor, j);
                         }
                         else
                         {
@@ -65,7 +65,6 @@ namespace bingo
                         if (valorIne == false)
                         {
                             matrizCart[i, j] = valor;
-                            MarcarNumero(valor, j);
                         }
                         else
                         {
@@ -79,7 +78,6 @@ namespace bingo
                         if (valorIne == false)
                         {
                             matrizCart[i, j] = valor;
-                            MarcarNumero(valor, j);
                         }
                         else
                         {
@@ -93,7 +91,6 @@ namespace bingo
                         if (valorIne == false)
                         {
                             matrizCart[i, j] = valor;
-                            MarcarNumero(valor, j);
                         }
                         else
                         {
@@ -102,7 +99,6 @@ namespace bingo
                     }
 
                 }
-                linhaTrue = VerificarLinha(i);
             }
         }
         private bool VerificaCartela(int valor, int col)
@@ -117,14 +113,11 @@ namespace bingo
             }
             return valorIne;
         }
-        public void MarcarNumero(int valor, int col)
+        public void MarcarNumero(int col, int lin)
         {
-            for (int i = 0; i < matrizBool.GetLength(0); i++)
-            {             
-                    if (matrizCart[i, col] == valor)
-                    {
-                        matrizBool[i, col] = true;  
-                    }
+            if (matrizBool[lin, col] == false)
+            {
+                matrizBool[lin, col] = true;
             }
         }
         public bool VerificarLinha(int linha)
@@ -139,12 +132,39 @@ namespace bingo
             }
             return linhaTrue;
         }
+        public bool VerificarColuna(int coluna) 
+        {
+            bool colunaTrue = true;
+            for (int i = 0; i < matrizBool.GetLength(0) && colunaTrue == true; i++)
+            {
+                if (matrizBool[i, coluna] == false)
+                {
+                    colunaTrue = false;
+                }
+            }
+            return colunaTrue;
+        }
+        //Mostrar a cartela no console
+        public void ObterCartela()
+        {
+            for (int i = 0; i < matrizCart.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrizCart.GetLength(1); j++)
+                {
+                    Console.Write(matrizCart[i, j] + "\t");
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+
+        }
     }
     class Jogador
     {
-        string nome;
-        char sexo;
-        int idade, total_Cartelas;
+        public string nome;
+        public char sexo;
+        public int idade, total_Cartelas;
         Random valor = new Random();
 
         public Cartela[] cartelasJog;
@@ -156,52 +176,98 @@ namespace bingo
             this.total_Cartelas = total_Cartelas;
             cartelasJog = new Cartela[total_Cartelas];
         }
-        public void AdicionarCartela(Cartela cart)
+        public void AdicionarCartela()
         {
             for (int i = 0; i < cartelasJog.Length; i++)
             {
-                cart.PreencherCartela(valor);
-                cartelasJog[i] = cart;
+                cartelasJog[i] = new Cartela();
+                cartelasJog[i].PreencherCartela(valor);
             }
         }
     }
     class Jogo
     {
-        Jogador[] jogadores;
-        public int[] numerosSort = new int[75];
+        public Jogador[] jogadores;
+        public int[] numerosSorteados = new int[75];
         public int numSort = 0;
-        bool verificaNumSort = true;
+
         public Jogo(int totalJogadores)
         {
-            this.jogadores = new Jogador[totalJogadores];
+            jogadores = new Jogador[totalJogadores];
         }
-        public int[] SortearNumero(Random valor)
+        public int SortearNumero(Random valor)
         {
-            int numeroSort = valor.Next(1, 76);
-            for (int i = 0; i < numeroSort && verificaNumSort == true; i++)
+            bool verificaNumSort;
+            int numeroSort;
+            do
             {
-                for (int j = 0; j < numeroSort && verificaNumSort == true; j++)
+                verificaNumSort = true;
+                numeroSort = valor.Next(1, 76);
+                for (int i = 0; i < numerosSorteados.Length && verificaNumSort == true; i++)
                 {
-                    if (numerosSort[j] == numeroSort)
+                    if (numerosSorteados[i] == numeroSort)
                     {
                         verificaNumSort = false;
                     }
                 }
-                if (verificaNumSort)
-                {
-                    numerosSort[i] = numeroSort;
-                    numSort++;
-
-                }
             }
-            return numerosSort;
+            while (verificaNumSort == false);
+
+            numerosSorteados[numSort] = numeroSort;
+            numSort++;
+            return numeroSort;
+        }
+        public void CriarCartelas()
+        {
+            for (int i = 0; i < jogadores.Length; i++)
+            {
+                
+            }
         }
     }
     internal class Program
     {
         static void Main(string[] args)
         {
+            int total_jogadores, total_cartelas, idade;
+            string nome;
+            char sexo;
+            Console.WriteLine("Antes de começar o jogo, precisamos de algumas informações...");
+            Thread.Sleep(5000);
+            Console.Clear();
+            do
+            {
+                Console.WriteLine("Quantos Jogadores irá ter neste jogo? (Min: 2, Max: 5)");
+                total_jogadores = int.Parse(Console.ReadLine());
+            }
+            while (total_jogadores > 5 || total_jogadores < 2);
+            Console.Clear();
+            Jogo jogo1 = new Jogo(total_jogadores);
+            
+            for (int i = 0; i < total_jogadores; i++)
+            {
+                Console.WriteLine($"Informe o nome do {i+1}º Jogador");
+                nome = Console.ReadLine();
+                Console.Clear();
+                do
+                {
+                    Console.WriteLine($"Informe o sexo do {i + 1}º Jogador (Use M para Masculino e F para Feminino");
+                    sexo = char.Parse(Console.ReadLine());
+                } while (sexo != 'M' && sexo != 'F');
+                Console.Clear();
+                Console.WriteLine($"Informe a idade do {i + 1}º Jogador");
+                idade = int.Parse(Console.ReadLine());
+                Console.Clear();
+
+                do
+                {
+                    Console.WriteLine($"Informe a quantidade de cartelas do jogador {i + 1}º (Min:1, Max:4)");
+                    total_cartelas = int.Parse(Console.ReadLine());
+                }
+                while(total_cartelas > 4 || total_cartelas < 1);
+
+                Console.Clear();
+            }
         }
     }
 }
-
