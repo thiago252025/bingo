@@ -15,7 +15,8 @@ namespace bingo
     {
         public int[,] matrizCart = new int[5, 5];
         public bool[,] matrizBool = new bool[5, 5];
-
+        string[] indicaColunas = { " ", "C0", "C1", "C2", "C3", "C4" };
+        string[] indicaLinhas = {"L0", "L1", "L2", "L3", "L4" };
         public Cartela()
         {
             matrizCart[2, 2] = -1;
@@ -148,21 +149,18 @@ namespace bingo
         //verifica bingo em linha
         public bool VerificarLinha()
         {
-            bool linhaTrue = false, linhainteiraTrue = false;
-            for (int i = 0; i < matrizBool.GetLength(0) && linhaTrue == false; i++)
+            bool linhaTrue = false;
+            for (int i = 0; i < matrizBool.GetLength(0); i++)
             {
-                for (int j = 0; j < matrizBool.GetLength(1) && linhaTrue == false; j++)
+                linhaTrue = true;
+                for (int j = 0; j < matrizBool.GetLength(1) && linhaTrue == true; j++)
                 {
-                    if (matrizBool[i, j] == true)
-                    {
-                        linhaTrue = true;
-                    }
-                    else
+                    if (matrizBool[i, j] == false)
                     {
                         linhaTrue = false;
                     }
                 }
-                if (linhainteiraTrue) 
+                if (linhaTrue) 
                 {
                     return true;
                 }
@@ -172,15 +170,20 @@ namespace bingo
         //verifica bingo em coluna
         public bool VerificarColuna()
         {
-            bool colunaTrue = true;
-            for (int i = 0; i < matrizBool.GetLength(0) && colunaTrue == true; i++)
+            bool colunaTrue = false;
+            for (int i = 0; i < matrizBool.GetLength(0); i++)
             {
+                colunaTrue = true;
                 for (int j = 0; j < matrizBool.GetLength(0) && colunaTrue == true; j++)
                 {
-                    if (matrizBool[i, j] == false)
+                    if (matrizBool[j, i] == false)
                     {
                         colunaTrue = false;
                     }
+                }
+                if (colunaTrue)
+                {
+                    return true;
                 }
             }
             return colunaTrue;
@@ -190,10 +193,23 @@ namespace bingo
         {
             if (CartelaEmJogo())
             {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("bingo");
+                for (int i = 0; i < indicaColunas.Length; i++)
+                {
+                    Console.Write(indicaColunas[i] + "\t");
+                }
+                Console.ResetColor();
+                Console.WriteLine();
+                Console.WriteLine();
                 for (int i = 0; i < matrizCart.GetLength(0); i++)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;                    
+                    Console.Write(indicaLinhas[i] + "\t");
+                    Console.ResetColor();
                     for (int j = 0; j < matrizCart.GetLength(1); j++)
                     {
+                        
                         Console.Write(matrizCart[i, j] + "\t");
                     }
                     Console.WriteLine();
@@ -219,7 +235,7 @@ namespace bingo
         {
             return jogadores[jogador].cartelasJog[cartela];
         }
-        public void CartelaEliminada(int jogador, int cartela)
+        public void CartelaEliminada()
         {
             matrizCart[0, 0] = 0;
         }
@@ -233,6 +249,19 @@ namespace bingo
             {
                 return false;
             }
+        }
+        // verifica quantas cartelas o jogador ainda tem
+        public bool VerificaQntCartelasJog()
+        {
+            if(matrizCart[0, 0] != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
     }
     class Jogador
@@ -312,7 +341,6 @@ namespace bingo
         }
         public void IniciarJogo(Random valor, int total_jogadores)
         {
-            
             //variaveis MarDes vão conter informações para marcar ou desmarcar 
             int resposta, MarDesLinha, MarDesColuna, jogadorestotais = total_jogadores;
             char lc;
@@ -325,89 +353,126 @@ namespace bingo
                 {
                     for (int j = 0; j < jogadores[i].cartelasJog.Length; j++)
                     {
-                        jogadores[i].cartelasJog[j].CartelaEmJogo();
-                        Console.WriteLine($"O número sorteado foi {numeroSorteado}");
-                        Console.WriteLine($"Cartela do Jogador {i + 1}");
-                        jogadores[i].cartelasJog[j].ObterCartela();
-                        Console.WriteLine("Deseja fazer algo ?");
-                        Console.WriteLine("[1] Marcar");
-                        Console.WriteLine("[2] Desmarcar");
-                        Console.WriteLine("[3] Gritar Bingo");
-                        if (j == jogadores[i].cartelasJog.Length - 1)
+                        if (jogadores[i].cartelasJog[j].CartelaEmJogo())
                         {
-                            Console.WriteLine("[4] Próximo Jogador");
-                        }
-                        else
-                        {
-                            Console.WriteLine("[4] Próxima Cartela");
-                        }
-                        do
-                        {
-                            Console.Write("Digite o número para selecionar a opção: ");
-                            resposta = int.Parse(Console.ReadLine());
-                            switch (resposta)
+
+
+                            Console.Write("Os números sorteados foram: ");
+                            for (int l = 0; l < numSort; l++)
                             {
-                                case 1:
-                                    Console.WriteLine("Qual posição deseja marcar (Linha e Coluna) ?");
-                                    Console.Write("Linha: ");
-                                    MarDesLinha = int.Parse(Console.ReadLine());
-                                    Console.Write("\nColuna: ");
-                                    MarDesColuna = int.Parse(Console.ReadLine());
-                                    if(jogadores[i].cartelasJog[j].MarcarCartela(MarDesLinha, MarDesColuna))
-                                    {
-                                        Console.WriteLine("Posição marcada com sucesso !!");
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("Posição já está marcada");
-                                    }
-                                    break;
-                                case 2:
-                                    Console.WriteLine("Qual posição deseja desmarcar ?");
-                                    Console.Write("Linha: ");
-                                    MarDesLinha = int.Parse(Console.ReadLine());
-                                    Console.Write("\nColuna: ");
-                                    MarDesColuna = int.Parse(Console.ReadLine());
-                                    if (jogadores[i].cartelasJog[j].DesmarcarCartela(MarDesLinha, MarDesColuna))
-                                    {
-                                        Console.WriteLine("Posição desmarcada com sucesso !!");
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("Posição não estava marcada para a ação desmarcar ser executada");
-                                    }
-                                    break;
-                                case 3:
-                                    Console.Clear();
-                                    Console.Write("Linha ou Coluna está completa ? (Use L/C): ");
-                                    lc = char.Parse(Console.ReadLine());
-                                    Console.Clear();
-                                    if (GritarBingo(lc, i, j))
-                                    {
-                                        Console.Clear();
-                                        Console.WriteLine("Parabéns sua cartela estava correta !!!");
-                                        jogadorestotais--;
-                                        ranking[VerificaRanking()] = jogadores[i];
-                                        
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("Sua cartela foi retirada do jogo, pois o BINGO foi gritado de forma errada...");
-                                    }
-                                    break;
-                                case 4:
-                                    break;
-                                default:
-                                    Console.WriteLine("Opção Inexistente");
-                                    break;
+                                Console.Write(numerosSorteados[l] + " | ");
                             }
-                        } while (resposta != 4);
-                        Console.Clear();
+                            Console.WriteLine("\n");
+                            Console.WriteLine($"O número sorteado nesta rodada foi {numeroSorteado}\n\n");
+                            Console.WriteLine($"Jogador {i+1}\nCartela {j + 1}\n");
+                            jogadores[i].cartelasJog[j].ObterCartela();
+                            Console.WriteLine("Deseja fazer algo ?");
+                            Console.WriteLine("[1] Marcar");
+                            Console.WriteLine("[2] Desmarcar");
+                            Console.WriteLine("[3] Gritar Bingo");
+                            if (j == jogadores[i].cartelasJog.Length - 1)
+                            {
+                                Console.WriteLine("[4] Próximo Jogador");
+                            }
+                            else
+                            {
+                                Console.WriteLine("[4] Próxima Cartela");
+                            }
+                            do
+                            {
+                                Console.Write("Digite o número para selecionar a opção: ");
+                                resposta = int.Parse(Console.ReadLine());
+                                switch (resposta)
+                                {
+                                    case 1:
+                                        Console.WriteLine("Qual posição deseja marcar (Linha e Coluna) ?");
+                                        Console.Write("Linha: ");
+                                        MarDesLinha = int.Parse(Console.ReadLine());
+                                        Console.Write("Coluna: ");
+                                        MarDesColuna = int.Parse(Console.ReadLine());
+                                        if (jogadores[i].cartelasJog[j].MarcarCartela(MarDesLinha, MarDesColuna))
+                                        {
+                                            Console.WriteLine("Posição marcada com sucesso !!");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Posição já está marcada");
+                                        }
+                                        Thread.Sleep(1500);
+                                        resposta = 4;
+                                        break;
+                                    case 2:
+                                        Console.WriteLine("Qual posição deseja desmarcar ?");
+                                        Console.Write("Linha: ");
+                                        MarDesLinha = int.Parse(Console.ReadLine());
+                                        Console.Write("Coluna: ");
+                                        MarDesColuna = int.Parse(Console.ReadLine());
+                                        if (jogadores[i].cartelasJog[j].DesmarcarCartela(MarDesLinha, MarDesColuna))
+                                        {
+                                            Console.WriteLine("Posição desmarcada com sucesso !!");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Posição não estava marcada para a ação desmarcar ser executada");
+                                        }
+                                        Thread.Sleep(1500);
+                                        resposta = 4;
+                                        break;
+                                    case 3:
+                                        Console.Clear();
+                                        Console.Write("Linha ou Coluna está completa ? (Use L/C): ");
+                                        lc = char.Parse(Console.ReadLine());
+                                        Console.Clear();
+                                        if (GritarBingo(lc, i, j))
+                                        {
+                                            Console.Clear();
+                                            Console.WriteLine("Parabéns sua cartela estava correta !!!");
+                                            jogadorestotais--;
+                                            ranking[VerificaRankingGanhador()] = jogadores[i];
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Sua cartela foi retirada do jogo, pois o BINGO foi gritado de forma errada...");
+                                            jogadores[i].cartelasJog[j].CartelaEliminada();
+                                            int qntCartelasJog = 0;
+                                            for (int k = 0; k < jogadores[i].cartelasJog.Length; k++)
+                                            {
+                                                if (jogadores[i].cartelasJog[k].VerificaQntCartelasJog())
+                                                {
+                                                    qntCartelasJog++;
+                                                }
+                                            }
+                                            if (qntCartelasJog == 0)
+                                            {
+                                                jogadorestotais--;
+                                                jogadores[i].total_Cartelas--;
+                                                ranking[VerificaRankingPerdedor()] = jogadores[i];
+                                            }
+                                            if (jogadorestotais == 1)
+                                            {
+                                                ranking[VerificaRankingGanhador()] = jogadores[i - 1];
+                                            }
+
+                                        }
+                                        Thread.Sleep(2000);
+                                        resposta = 4;
+                                        break;
+                                    case 4:
+                                        break;
+                                    default:
+                                        Console.WriteLine("Opção Inexistente");
+                                        break;
+                                }
+
+                            } while (resposta != 4);
+                            Console.Clear();
+                        }
                     }
                 }
             } while (jogadorestotais != 1);
+            MostrarRanking();
         }
-        public int VerificaRanking()
+        public int VerificaRankingGanhador()
         {
             int posranking = 0;
             for(int i = 0; i < ranking.Length; i++)
@@ -420,7 +485,30 @@ namespace bingo
             }
             return posranking;
         }
-
+        public int VerificaRankingPerdedor()
+        {
+            int posranking = ranking.Length-1;
+            for (int i = ranking.Length-1; i >= 0; i--)
+            {
+                if (ranking[i] == null)
+                {
+                    posranking = i;
+                    return posranking;
+                }
+            }
+            return posranking;
+        }
+        public void MostrarRanking()
+        {
+            Console.WriteLine("=================================");
+            Console.WriteLine("||    O RANKING FICOU ASSIM    ||");
+            Console.WriteLine("=================================");
+            for (int i = 0; i < ranking.Length; i++) 
+            {
+                Console.WriteLine($"{i+1}º LUGAR: {ranking[i].nome} | {ranking[i].idade} | {ranking[i].sexo}");
+            }
+            Console.ReadLine();
+        }
         public bool GritarBingo(char lc, int jogador, int cartela)
         {
             bool resultado;
@@ -445,23 +533,33 @@ namespace bingo
             int total_cartelas, idade;
             string nome;
             char sexo;
-
-
             for (int i = 0; i < total_jogadores; i++)
             {
-                Console.WriteLine($"Nome do {i + 1}º Jogador");
+                Console.WriteLine("========================");
+                Console.WriteLine($"|| Nome do {i + 1}º Jogador ||");
+                Console.WriteLine("========================");
+                Console.Write("Resposta:");
                 nome = Console.ReadLine();
                 do
                 {
-                    Console.WriteLine($"Sexo do {i + 1}º Jogador (M/F)");
+                    Console.WriteLine("==============================");
+                    Console.WriteLine($"|| Sexo do {i + 1}º Jogador (M/F) ||");
+                    Console.WriteLine("==============================");
+                    Console.Write("Resposta:");
                     sexo = char.Parse(Console.ReadLine());
                 } while (sexo != 'M' && sexo != 'F' && sexo != 'f' && sexo != 'm');
-                Console.WriteLine($"Idade do {i + 1}º Jogador");
+                Console.WriteLine("=========================");
+                Console.WriteLine($"|| Idade do {i + 1}º Jogador ||");
+                Console.WriteLine("=========================");
+                Console.Write("Resposta:");
                 idade = int.Parse(Console.ReadLine());
 
                 do
                 {
-                    Console.WriteLine($"Quantidade de cartelas do jogador {i + 1}º (Min:1, Max:4)");
+                    Console.WriteLine("=========================================================");
+                    Console.WriteLine($"|| Quantidade de cartelas do jogador {i + 1}º (Min:1, Max:4) ||");
+                    Console.WriteLine("=========================================================");
+                    Console.Write("Resposta:");
                     total_cartelas = int.Parse(Console.ReadLine());
                 }
                 while (total_cartelas > 4 || total_cartelas < 1);
@@ -470,18 +568,46 @@ namespace bingo
 
                 Console.Clear();
             }
+            
+        }
+        static void Instrucoes()
+        {
+            string[,] exemplo = { { "bingo", "C0", "C1", "C2" }, { "L0", "1", "2", "3" }, { "L1", "4", "5", "6" }, { "L2", "7", "8", "9" } };
+            Console.WriteLine("======================================");
+            Console.WriteLine("||            Instruções            ||");
+            Console.WriteLine("======================================\n");
+            Console.WriteLine("Vai ser apresentada uma cartela a cada jogada");
+            Console.WriteLine("A cartela a seguir é somente um exemplo\n");
+            for(int i = 0; i < exemplo.GetLength(0); i++) 
+            {
+                for(int j = 0; j < exemplo.GetLength(1); j++)
+                {
+                    Console.Write(exemplo[i,j] + "\t");
+                }
+                Console.WriteLine("\n");
+            }
+            Console.WriteLine("Números após C e L representa as colunas e linhas\n\"C0\" = Coluna 0\t \"L1\" = Linha 1\n");
+            Console.WriteLine("Quando for pedido para informar Coluna e Linha, informe somente o número que representa a coluna e a linha.");
+            Console.WriteLine("Obrigado e Bom Jogo!!!\n");
+            Console.WriteLine("Pressione enter para prosseguir...");
+            Console.ReadLine();
         }
         static void Main(string[] args)
         {
             {
                 Random r = new Random();
                 int total_jogadores;
+                Instrucoes();
+                Console.Clear();
                 Console.WriteLine("Antes de começar o jogo, precisamos de algumas informações...");
                 Thread.Sleep(5000);
                 Console.Clear();
                 do
                 {
-                    Console.WriteLine("Quantos Jogadores irá ter neste jogo? (Min: 2, Max: 5)");
+                    Console.WriteLine("============================================================");
+                    Console.WriteLine("|| Quantos Jogadores irá ter neste jogo? (Min: 2, Max: 5) ||");
+                    Console.WriteLine("============================================================");
+                    Console.Write("Resposta:");
                     total_jogadores = int.Parse(Console.ReadLine());
                 }
                 while (total_jogadores > 5 || total_jogadores < 2);
