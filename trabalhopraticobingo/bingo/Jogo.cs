@@ -142,7 +142,7 @@ namespace bingo
                             }
                         }
                     }
-                    arquivojogos.WriteLine($"Jogador{jogador} com a cartela {cartela} gritou bingo certo, foi para o ranking");
+                    arquivojogos.WriteLine($"Jogador{jogador} com a cartela {cartela} gritou bingo certo, foi para o ranking\n");
                     resposta = 4;
                 }
                 else
@@ -190,14 +190,13 @@ namespace bingo
 
             }
 
-            arquivojogos.WriteLine($"Ação do jogador {jogador + 1}\n");
             return resposta;
         }
         // Metodo de seleção de opções
         public int MenuOpcoes(int jogador, int cartela, ref int jogadorestotais, StreamWriter arquivojogos)
         {
             arquivojogos.WriteLine("Menu de Opções\n");
-            arquivojogos.WriteLine($"Perguntado o que o jogador {jogador + 1} quer fazer\n");
+            arquivojogos.WriteLine($"Perguntado o que o jogador {jogador} quer fazer\n");
             int resposta;
 
             Console.WriteLine("Deseja fazer algo ?");
@@ -223,11 +222,9 @@ namespace bingo
         public int MenuPrincipal(int jogador, int cartela, ref int jogadorestotais, int numeroSorteado, StreamWriter arquivojogos)
         {
             Console.Write("Os números sorteados foram: ");
-            arquivojogos.Write("Os números sorteados foram: ");
             for (int l = 0; l < numSort; l++)
             {
                 Console.Write(numerosSorteados[l] + " | ");
-                arquivojogos.Write(numerosSorteados[l] + " | ");
             }
             arquivojogos.WriteLine();
             Console.WriteLine("\n");
@@ -235,7 +232,7 @@ namespace bingo
             Console.WriteLine($"Jogador {jogador + 1} | {jogadores[jogador].nome}\nCartela {cartela + 1}\n");
             jogadores[jogador].cartelasJog[cartela].ObterCartela();
             arquivojogos.WriteLine("Menu principal\n");
-            arquivojogos.WriteLine($"Informado o número que foi sorteado na rodada: {numeroSorteado}, vez do jogador {jogador + 1}\n");
+            arquivojogos.WriteLine($"Informado o número que foi sorteado na rodada: {numeroSorteado}, vez do jogador {jogador}\n");
             return MenuOpcoes(jogador, cartela, ref jogadorestotais, arquivojogos);
         }
         public void IniciarJogo(Random valor, int total_jogadores, StreamWriter arquivojogos)
@@ -257,7 +254,7 @@ namespace bingo
                     {
                         break;
                     }
-                    for (int j = 0; j < jogadores[i].cartelasJog.Length; j++)
+                    for (int j = 0; j < jogadores[i].cartelasJog.Length && jogadores[i].noJogo; j++)
                     {
                         if (jogadores[i].cartelasJog[j].CartelaEmJogo())
                         {
@@ -280,6 +277,7 @@ namespace bingo
                 }
             }
 
+            arquivojogos.WriteLine();
             arquivojogos.WriteLine();
             MostrarRanking(arquivojogos);
         }

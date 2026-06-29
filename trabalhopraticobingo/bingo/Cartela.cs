@@ -20,9 +20,9 @@ namespace bingo
             matrizBool[2, 2] = true;
             cartelaMarcada[2, 2] = true;
         }
-        public void PreencherCartela(Random r, Jogador[] jogadores, StreamWriter teste)
+        public void PreencherCartela(Random r, Jogador[] jogadores, StreamWriter arquivojogos)
         {
-            teste.WriteLine("Preenchendo cartela");
+            arquivojogos.WriteLine("Preenchendo cartela");
             bool valorIne, matrizIgual;
             do
             {
@@ -105,9 +105,9 @@ namespace bingo
 
                 }
                 matrizIgual = CartelaIgual(jogadores);
-                teste.WriteLine("Verificando se a cartela é igual\n");
+                arquivojogos.WriteLine("Verificando se a cartela é igual\n");
             } while (matrizIgual);
-            teste.WriteLine("Cartela Pronta para ser usada\n");
+            arquivojogos.WriteLine("Cartela Pronta para ser usada\n");
         }
         // verifica se existe número repetido na cartela, na hora da criação 
         private bool VerificaCartela(int valor, int col)

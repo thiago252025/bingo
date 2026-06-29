@@ -1,0 +1,85 @@
+﻿Código Iniciado
+
+bingo	C0	C1	C2	
+
+L0	1	2	3	
+
+L1	4	5	6	
+
+L2	7	8	9	
+
+======================================
+||            Instruções            ||
+
+======================================
+Vai ser apresentada uma cartela a cada jogada
+A cartela a seguir é somente um exemplo
+
+Números após C e L representa as colunas e linhas
+"C0" = Coluna 0	 "L1" = Linha 1
+
+Quando for pedido para informar Coluna e Linha, informe somente o número que representa a coluna e a linha.
+Obrigado e Bom Jogo!!!
+
+Pressione enter para prosseguir...
+
+Antes de começar o jogo, precisamos de algumas informações...
+Quantos Jogadores irá ter neste jogo? (Min: 2 Max: 5)
+Resposta: 2
+Cadastro de jogador
+Foi adicionado um jogador. Nome:thiago, Sexo:m, Idade:18, Qnt Cartelas:1
+
+Preenchendo cartela
+Verificando se a cartela é igual
+
+Cartela Pronta para ser usada
+
+Cartela 0 do jogador thiago foi preenchida
+
+14	28	34	46	69	
+11	27	31	52	72	
+6	24	-1	60	62	
+4	26	33	59	75	
+12	16	43	57	71	
+Foi adicionado um jogador. Nome:lucas, Sexo:m, Idade:19, Qnt Cartelas:1
+
+Preenchendo cartela
+Verificando se a cartela é igual
+
+Cartela Pronta para ser usada
+
+Cartela 0 do jogador lucas foi preenchida
+
+1	20	38	58	63	
+14	26	43	50	61	
+13	21	-1	54	64	
+12	30	42	48	65	
+9	19	34	51	73	
+Jogo Iniciado
+
+Menu principal
+
+Informado o número que foi sorteado na rodada: 41, vez do jogador 0
+
+Menu de Opções
+
+Perguntado o que o jogador 0 quer fazer
+
+Menu de Resposta
+
+Jogador0 com a cartela 0 gritou bingo
+
+Jogador0 com a cartela 0 gritou bingo errado
+
+Jogador eliminado do jogo e foi adicionado no ranking
+
+Os números sorteados foram: 41 | 
+
+JOGO FINALIZADO
+=================================
+||    O RANKING FICOU ASSIM    ||
+=================================
+1º LUGAR: lucas | 19 | m
+
+2º LUGAR: thiago | 18 | m
+

@@ -96,7 +96,7 @@ namespace bingo
         {
             try
             {
-                StreamWriter arquivojogos = new StreamWriter("jogos.txt", false, Encoding.UTF8);
+                StreamWriter arquivojogos = new StreamWriter("log.txt", false, Encoding.UTF8);
                 Random r = new Random();
                 int total_jogadores;
                 arquivojogos.WriteLine("Código Iniciado\n");
